@@ -31,7 +31,7 @@ export class Background extends PIXI.Container {
 
   background() {
     const tileCountX = 1024 / 32;
-    const tileCountY = 768 / 32;
+    const tileCountY = 768 / 24;
     for (let i = 0; i < tileCountX; i++) {
       for (let j = 0; j < tileCountX; j++) {
         this.createTile(i, j);
