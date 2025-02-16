@@ -89,14 +89,23 @@ export class Level extends PIXI.Container {
     );
   }
 
-  private hitTest(s1: PIXI.Sprite, s2: PIXI.Sprite) {
-    if (s1.x - s1.width / 2 + s1.width / 2 > s2.x - s2.width / 2)
-      if (s1.x - s1.width / 2 < s2.x - s2.width / 2 + s2.width / 2)
-        if (s1.y - s1.height / 2 + s1.height / 2 > s2.y - s2.height / 2)
-          if (s1.y - s1.height / 2 < s2.y - s2.height / 2 + s2.height / 2)
-            return true;
+  private hitTest(s1: PIXI.Sprite, s2: PIXI.Sprite): boolean {
+    const s1Left = s1.x - s1.width / 2;
+    const s1Right = s1.x + s1.width / 2;
+    const s1Top = s1.y - s1.height / 2;
+    const s1Bottom = s1.y + s1.height / 2;
 
-    return false;
+    const s2Left = s2.x - s2.width / 2;
+    const s2Right = s2.x + s2.width / 2;
+    const s2Top = s2.y - s2.height / 2;
+    const s2Bottom = s2.y + s2.height / 2;
+
+    return (
+      s1Right > s2Left &&
+      s1Left < s2Right &&
+      s1Bottom > s2Top &&
+      s1Top < s2Bottom
+    );
   }
 
   private createBackground(): Background {
@@ -104,42 +113,15 @@ export class Level extends PIXI.Container {
   }
 
   public createEnemy() {
+    const enemies = ["Cow", "Bear", "Buffalo", "Chicken", "Chick_yellow"];
     const random = Math.floor(Math.random() * 5);
+    const randomSprite = enemies[random];
 
-    switch (random) {
-      case 0:
-        const cow = new Enemy("Cow", this._resources);
-        this.addChild(cow);
-        this._enemies.push(cow);
-        cow.setRandomPosition();
-        break;
-      case 1:
-        const bear = new Enemy("Bear", this._resources);
-        this.addChild(bear);
-        this._enemies.push(bear);
-        bear.setRandomPosition();
-        break;
-      case 2:
-        const buffalo = new Enemy("Buffalo", this._resources);
-        this.addChild(buffalo);
-        this._enemies.push(buffalo);
-        buffalo.setRandomPosition();
-        break;
-      case 3:
-        const chicken = new Enemy("Chicken", this._resources);
-        this.addChild(chicken);
-        this._enemies.push(chicken);
-        chicken.setRandomPosition();
-        break;
-      case 4:
-        const chicken_yellow = new Enemy("Chick_yellow", this._resources);
-        this.addChild(chicken_yellow);
-        this._enemies.push(chicken_yellow);
-        chicken_yellow.setRandomPosition();
-        break;
+    const enemy = new Enemy(randomSprite, this._resources);
+    this.addChild(enemy);
+    this._enemies.push(enemy);
+    enemy.setRandomPosition();
 
-      default:
-        break;
-    }
+    return enemy;
   }
 }
