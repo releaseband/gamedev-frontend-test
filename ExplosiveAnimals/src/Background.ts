@@ -2,38 +2,49 @@ import * as PIXI from 'pixi.js'
 import { Level } from './Level'
 
 export class Background extends PIXI.Container {
-  private _level: Level
-  private tiles: PIXI.Graphics[] = []
+  private readonly _level: Level
+  private readonly tiles: PIXI.Graphics[] = []
+
+  private static readonly TILE_SIZE = 32
+  private static readonly TILE_SCALE = 0.8
+  private static readonly TILE_OFFSET = 0.1
+  private static readonly TILE_COLOR = 0x000000
+  private static readonly TILE_ALPHA = 0.2
+
+  private static readonly TILE_COUNT_X = 1024 / 32
+  private static readonly TILE_COUNT_Y = 768 / 24
 
   constructor(level: Level) {
     super()
     this._level = level
     this._level.addChild(this)
 
-    this.background()
+    this.generateBackground()
   }
 
   private createTile(x: number, y: number): void {
-    const fillColor = 0x000000
-    const alpha = 0.2
-    const posX = x * 32 + 32 * 0.1
-    const posY = y * 32 + 32 * 0.1
-    const width = 32 * 0.8
-    const height = 32 * 0.8
+    const { TILE_SIZE, TILE_SCALE, TILE_OFFSET, TILE_COLOR, TILE_ALPHA } =
+      Background
+
+    const size = TILE_SIZE * TILE_SCALE
+    const offset = TILE_SIZE * TILE_OFFSET
+    const posX = x * TILE_SIZE + offset
+    const posY = y * TILE_SIZE + offset
 
     const tile = new PIXI.Graphics()
-      .beginFill(fillColor, alpha)
-      .drawRect(posX, posY, width, height)
+      .beginFill(TILE_COLOR, TILE_ALPHA)
+      .drawRect(posX, posY, size, size)
       .endFill()
+
     this.addChild(tile)
     this.tiles.push(tile)
   }
 
-  background(): void {
-    const tileCountX = 1024 / 32
-    const tileCountY = 768 / 24
-    for (let i = 0; i < tileCountX; i++) {
-      for (let j = 0; j < tileCountY; j++) {
+  generateBackground(): void {
+    const { TILE_COUNT_X, TILE_COUNT_Y } = Background
+
+    for (let i = 0; i < TILE_COUNT_X; i++) {
+      for (let j = 0; j < TILE_COUNT_Y; j++) {
         this.createTile(i, j)
       }
     }
