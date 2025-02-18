@@ -30,7 +30,7 @@ export class Enemy extends PIXI.Container {
     this.addChild(this.animalName)
   }
 
-  public setRandomPosition() {
+  public setRandomPosition(): void {
     this.x =
       this.enemySprite.width * 2 +
       Math.random() * (1024 - this.enemySprite.width * 2)
@@ -40,7 +40,7 @@ export class Enemy extends PIXI.Container {
     this._rndRir = Math.random() * 360
   }
 
-  public update(dt: number) {
+  public update(): void {
     this.x += Math.sin(this._rndRir) * 2
     this.y += Math.cos(this._rndRir) * 2
 

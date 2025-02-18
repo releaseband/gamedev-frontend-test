@@ -4,7 +4,7 @@ import { Level } from './Level'
 
 export class Game {
   app: PIXI.Application
-  resources: any | null = null
+  resources: PIXI.utils.Dict<PIXI.LoaderResource> | null = null
   sounds: Map<string, Howl> = new Map()
   Level: Level | null = null
 
@@ -28,7 +28,7 @@ export class Game {
   }
 
   //TODO: resource manager
-  async preload(onLoadCallback: CallableFunction) {
+  async preload(onLoadCallback: CallableFunction): Promise<void> {
     const promises: Promise<void>[] = []
 
     const loadSoundAsync = (path: string) =>
@@ -66,7 +66,7 @@ export class Game {
       .catch((err) => console.warn('error loading resources'))
   }
 
-  run() {
+  run(): void {
     const spinnersContainer = new PIXI.Container()
     this.app.stage.addChild(spinnersContainer)
 
@@ -86,7 +86,7 @@ export class Game {
     return <Howl>this.sounds.get(path)
   }
 
-  populate() {
+  populate(): void {
     if (this.resources) {
       const level = new Level(this.resources)
       this.app.stage.addChild(level)

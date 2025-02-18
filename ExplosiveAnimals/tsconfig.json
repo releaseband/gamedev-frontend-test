@@ -1,7 +1,17 @@
 {
-  "extends": "@releaseband/typescript-config",
-  "include": ["src/**/*", "i18next-parser.config.js", "vite.config.ts"],
-  "compilerOptions": {
-    "baseUrl": "."
-  }
+	"compilerOptions": {
+		"strict": true,
+		"module": "esnext",
+		"lib": ["webworker", "DOM"],
+		"declaration": false,
+		"sourceMap": true,
+		"target": "es6",
+		"esModuleInterop": true,
+		"moduleResolution": "node",
+		"noImplicitAny": true,
+		"removeComments": true,
+		"preserveConstEnums": true,
+		"allowSyntheticDefaultImports": true
+	},
+	"outDir": "./"
 }

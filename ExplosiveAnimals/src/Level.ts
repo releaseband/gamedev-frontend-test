@@ -3,11 +3,11 @@ import { Background } from './Background'
 import { Enemy } from './Enemies/Enemy'
 
 export class Level extends PIXI.Container {
-  private _resources: any
+  private _resources: PIXI.utils.Dict<PIXI.LoaderResource>
   private backGround: Background
-  private _enemies: any[] = []
+  private _enemies: Enemy[] = []
 
-  constructor(resources: any) {
+  constructor(resources: PIXI.utils.Dict<PIXI.LoaderResource>) {
     super()
 
     this._resources = resources
@@ -27,7 +27,7 @@ export class Level extends PIXI.Container {
     createEnemyByTimer()
   }
 
-  public update(dt: number) {
+  public update(dt: number): void {
     if (this.backGround.x != 0 || this.backGround.y != 0) {
       this.backGround.position.set(0, 0)
     }
@@ -49,7 +49,7 @@ export class Level extends PIXI.Container {
     }
   }
 
-  private destroyEnemies(enemy: PIXI.Sprite, prevEnemy: PIXI.Sprite): boolean {
+  private destroyEnemies(enemy: Enemy, prevEnemy: Enemy): boolean {
     this.processInteraction(
       (enemy.x + prevEnemy.x) / 2,
       (enemy.y + prevEnemy.y) / 2,
@@ -89,7 +89,7 @@ export class Level extends PIXI.Container {
     )
   }
 
-  private hitTest(s1: PIXI.Sprite, s2: PIXI.Sprite): boolean {
+  private hitTest(s1: Enemy, s2: Enemy): boolean {
     const s1Left = s1.x - s1.width / 2
     const s1Right = s1.x + s1.width / 2
     const s1Top = s1.y - s1.height / 2
@@ -112,7 +112,7 @@ export class Level extends PIXI.Container {
     return new Background(this)
   }
 
-  public createEnemy() {
+  public createEnemy(): Enemy {
     const enemies = ['Cow', 'Bear', 'Buffalo', 'Chicken', 'Chick_yellow']
     const random = Math.floor(Math.random() * 5)
     const randomSprite = enemies[random]

@@ -13,7 +13,7 @@ export class Background extends PIXI.Container {
     this.background()
   }
 
-  private createTile(x: number, y: number) {
+  private createTile(x: number, y: number): void {
     const fillColor = 0x000000
     const alpha = 0.2
     const posX = x * 32 + 32 * 0.1
@@ -29,11 +29,11 @@ export class Background extends PIXI.Container {
     this.tiles.push(tile)
   }
 
-  background() {
+  background(): void {
     const tileCountX = 1024 / 32
     const tileCountY = 768 / 24
     for (let i = 0; i < tileCountX; i++) {
-      for (let j = 0; j < tileCountX; j++) {
+      for (let j = 0; j < tileCountY; j++) {
         this.createTile(i, j)
       }
     }
