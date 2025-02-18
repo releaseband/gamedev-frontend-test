@@ -72,11 +72,11 @@ export class Game {
 
     let lastTimestamp = 16
     const run = (timestamp = 0) => {
-      const dt = timestamp - lastTimestamp
+      // const dt = timestamp - lastTimestamp
       lastTimestamp = timestamp
       this.app.renderer.render(this.app.stage)
       requestAnimationFrame(run)
-      if (this.Level) this.Level.update(dt)
+      if (this.Level) this.Level.update()
     }
     run()
   }
