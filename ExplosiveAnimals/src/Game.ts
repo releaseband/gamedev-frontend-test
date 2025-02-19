@@ -2,6 +2,12 @@ import * as PIXI from 'pixi.js'
 import { Howl } from 'howler'
 import { Level } from './Level'
 
+const appProps = {
+  width: 1024,
+  height: 768,
+  backgroundColor: 0x4ec0ca,
+}
+
 export class Game {
   app: PIXI.Application
   resources: PIXI.utils.Dict<PIXI.LoaderResource> | null = null
@@ -9,11 +15,7 @@ export class Game {
   Level: Level | null = null
 
   constructor() {
-    const app = new PIXI.Application({
-      width: 1024,
-      height: 768,
-      backgroundColor: 0x4ec0ca,
-    })
+    const app = new PIXI.Application(appProps)
     const appDiv = document.createElement('div')
     appDiv.className = 'app'
     appDiv.innerHTML = `<div class="ui-container"><div class="game-container"></div>`
@@ -72,11 +74,11 @@ export class Game {
 
     let lastTimestamp = 16
     const run = (timestamp = 0) => {
-      // const dt = timestamp - lastTimestamp
+      const dt = timestamp - lastTimestamp
       lastTimestamp = timestamp
       this.app.renderer.render(this.app.stage)
       requestAnimationFrame(run)
-      if (this.Level) this.Level.update()
+      if (this.Level) this.Level.update(dt)
     }
     run()
   }

@@ -27,13 +27,13 @@ export class Level extends PIXI.Container {
     createEnemyByTimer()
   }
 
-  public update(): void {
+  public update(dt: number): void {
     if (this.backGround.x != 0 || this.backGround.y != 0) {
       this.backGround.position.set(0, 0)
     }
 
     this._enemies.forEach((enemy) => {
-      enemy.update()
+      enemy.update(dt)
     })
 
     for (let i = 0; i < this._enemies.length; i++) {

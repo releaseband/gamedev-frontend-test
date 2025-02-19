@@ -40,9 +40,9 @@ export class Enemy extends PIXI.Container {
     this._rndRir = Math.random() * 360
   }
 
-  public update(): void {
-    this.x += Math.sin(this._rndRir) * 2
-    this.y += Math.cos(this._rndRir) * 2
+  public update(dt: number): void {
+    this.x += Math.sin(this._rndRir * dt) * 2
+    this.y += Math.cos(this._rndRir * dt) * 2
 
     const setRandomDirection = Math.random() * 360
 
