@@ -33,17 +33,14 @@ export class Level extends PIXI.Container {
       this.backGround.position.set(0, 0)
     }
 
-    this._enemies.forEach((enemy) => {
-      enemy.update(dt)
-    })
-
     for (let i = 0; i < this._enemies.length; i++) {
       const enemy = this._enemies[i]
+      enemy.update(dt)
 
-      for (let j = 0; j < this._enemies.length; j++) {
+      for (let j = i + 1; j < this._enemies.length; j++) {
         const otherEnemy = this._enemies[j]
 
-        if (i !== j && this.hitTest(enemy, otherEnemy)) {
+        if (this.hitTest(enemy, otherEnemy)) {
           this.destroyEnemies(enemy, otherEnemy)
         }
       }
