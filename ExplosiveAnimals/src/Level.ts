@@ -71,14 +71,24 @@ export class Level extends PIXI.Container {
     return true
   }
 
-  private processInteraction(x: number, y: number) {
+  private createExplosion(
+    x: number,
+    y: number,
+    anchor: number,
+    loop: boolean,
+  ): PIXI.AnimatedSprite {
     const explosion = PIXI.AnimatedSprite.fromFrames(
       this._resources.explosion.data.animations.tile,
     )
-    explosion.anchor.set(0.5, 0.5)
+    explosion.anchor.set(anchor, anchor)
     explosion.position.set(x, y)
-    explosion.loop = false
+    explosion.loop = loop
     explosion.play()
+    return explosion
+  }
+
+  private processInteraction(x: number, y: number) {
+    const explosion = this.createExplosion(x, y, 0.5, false)
     this.addChild(explosion)
 
     this.backGround.position.set(
