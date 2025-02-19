@@ -16,29 +16,55 @@ export class Enemy extends PIXI.Container {
 
   constructor(
     spriteName: string,
-    resources: PIXI.utils.Dict<PIXI.LoaderResource>,
+    private resources: PIXI.utils.Dict<PIXI.LoaderResource>,
   ) {
     super()
 
-    this.enemySprite = PIXI.Sprite.from(resources[spriteName].data)
-    this.enemySprite.anchor.set(0.5, 0.5)
-    this.enemySprite.scale.set(0.35, 0.35)
-    this.addChild(this.enemySprite)
+    this.enemySprite = this.createSprite(spriteName, 0.5, 0.35)
 
-    this.animalName = new PIXI.Text(spriteName, this.textStyle)
-    this.animalName.anchor.set(0.5, 0.5)
-    this.animalName.position.set(0, -this.enemySprite.height / 2 - 20)
+    this.animalName = this.createText(
+      spriteName,
+      this.textStyle,
+      0.5,
+      -this.enemySprite.height / 2 - 20,
+    )
+
     this.addChild(this.animalName)
+    this.addChild(this.enemySprite)
+  }
+
+  private createSprite(
+    spriteName: string,
+    anchor: number,
+    scale: number,
+  ): PIXI.Sprite {
+    const Sprite = PIXI.Sprite.from(this.resources[spriteName].data)
+    Sprite.anchor.set(anchor, anchor)
+    Sprite.scale.set(scale, scale)
+    return Sprite
+  }
+
+  private createText(
+    text: string,
+    style: PIXI.TextStyle,
+    anchor: number,
+    posY: number,
+  ): PIXI.Text {
+    const textSprite = new PIXI.Text(text, style)
+    textSprite.anchor.set(anchor, anchor)
+    textSprite.position.set(0, posY)
+
+    return textSprite
+  }
+
+  private getRandomValue(max: number, min: number): number {
+    return Math.random() * (max - min) + min
   }
 
   public setRandomPosition(maxX: number, maxY: number): void {
-    this.x =
-      this.enemySprite.width * 2 +
-      Math.random() * (maxX - this.enemySprite.width * 2)
-    this.y =
-      this.enemySprite.height * 2 +
-      Math.random() * (maxY - this.enemySprite.height * 2)
-    this._rndRir = Math.random() * 360
+    this.x = this.getRandomValue(maxX, this.enemySprite.width * 2)
+    this.y = this.getRandomValue(maxY, this.enemySprite.height * 2)
+    this._rndRir = this.getRandomValue(360, 0)
   }
 
   public update(dt: number): void {
@@ -48,8 +74,6 @@ export class Enemy extends PIXI.Container {
 
     this.x += moveX
     this.y += moveY
-
-    const setRandomDirection = Math.random() * 360
 
     const isOutOfBounds =
       this.x - width / 2 < 0 ||
@@ -61,7 +85,7 @@ export class Enemy extends PIXI.Container {
       this.x -= moveX * 10
       this.y -= moveY * 10
 
-      this._rndRir = setRandomDirection
+      this._rndRir = this.getRandomValue(360, 0)
     }
   }
 
