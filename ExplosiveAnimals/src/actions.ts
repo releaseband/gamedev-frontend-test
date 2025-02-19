@@ -3,7 +3,7 @@ import { Game } from './Game'
 import { GameContext, stateService } from '.'
 
 export const initAction = assign(
-  (context: GameContext, event: AnyEventObject) => {
+  (_context: GameContext, event: AnyEventObject) => {
     console.warn('init action', event)
     stateService.send('PRELOAD')
     return { game: new Game() }
@@ -40,6 +40,7 @@ export const lazyAction = (
 ): void => {
   console.warn('lazyload action', event)
 }
+
 export const errorAction = (
   _context: GameContext,
   event: AnyEventObject,

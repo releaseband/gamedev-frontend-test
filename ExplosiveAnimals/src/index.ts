@@ -20,34 +20,34 @@ const stateMachine = createMachine<GameContext>({
   },
   states: {
     init: {
+      entry: initAction,
       on: {
         PRELOAD: 'preload',
       },
-      onEntry: initAction,
     },
     preload: {
+      entry: preloadAction,
       on: {
         RUN: 'run',
         ERROR: 'error',
       },
-      onEntry: preloadAction,
     },
     run: {
+      entry: runAction,
       on: {
         LAZYLOAD: 'lazyLoad',
         ERROR: 'error',
       },
-      onEntry: runAction,
     },
     lazyLoad: {
+      entry: lazyAction,
       on: {
         ERROR: 'error',
       },
-      onEntry: lazyAction,
       type: 'final',
     },
     error: {
-      onEntry: errorAction,
+      entry: errorAction,
     },
   },
 })
