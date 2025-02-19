@@ -1,12 +1,7 @@
 import * as PIXI from 'pixi.js'
 import { Howl } from 'howler'
 import { Level } from './Level'
-
-const appProps = {
-  width: 1024,
-  height: 768,
-  backgroundColor: 0x4ec0ca,
-}
+import { APP_PROPS } from './Constants'
 
 export class Game {
   app: PIXI.Application
@@ -15,7 +10,7 @@ export class Game {
   Level: Level | null = null
 
   constructor() {
-    const app = new PIXI.Application(appProps)
+    const app = new PIXI.Application(APP_PROPS)
     const appDiv = document.createElement('div')
     appDiv.className = 'app'
     appDiv.innerHTML = `<div class="ui-container"><div class="game-container"></div>`

@@ -1,6 +1,7 @@
 import * as PIXI from 'pixi.js'
 import { Background } from './Background'
 import { Enemy } from './Enemies/Enemy'
+import { APP_PROPS } from './Constants'
 
 export class Level extends PIXI.Container {
   private _resources: PIXI.utils.Dict<PIXI.LoaderResource>
@@ -113,6 +114,7 @@ export class Level extends PIXI.Container {
   }
 
   public createEnemy(): Enemy {
+    const { width, height } = APP_PROPS
     const enemies = ['Cow', 'Bear', 'Buffalo', 'Chicken', 'Chick_yellow']
     const random = Math.floor(Math.random() * 5)
     const randomSprite = enemies[random]
@@ -120,7 +122,7 @@ export class Level extends PIXI.Container {
     const enemy = new Enemy(randomSprite, this._resources)
     this.addChild(enemy)
     this._enemies.push(enemy)
-    enemy.setRandomPosition()
+    enemy.setRandomPosition(width, height)
 
     return enemy
   }
