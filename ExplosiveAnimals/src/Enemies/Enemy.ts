@@ -1,4 +1,5 @@
 import * as PIXI from 'pixi.js'
+import { APP_PROPS } from '../Constants'
 
 export class Enemy extends PIXI.Container {
   private enemySprite: PIXI.Sprite
@@ -30,25 +31,36 @@ export class Enemy extends PIXI.Container {
     this.addChild(this.animalName)
   }
 
-  public setRandomPosition(): void {
+  public setRandomPosition(maxX: number, maxY: number): void {
     this.x =
       this.enemySprite.width * 2 +
-      Math.random() * (1024 - this.enemySprite.width * 2)
+      Math.random() * (maxX - this.enemySprite.width * 2)
     this.y =
       this.enemySprite.height * 2 +
-      Math.random() * (768 - this.enemySprite.height * 2)
+      Math.random() * (maxY - this.enemySprite.height * 2)
     this._rndRir = Math.random() * 360
   }
 
   public update(dt: number): void {
-    this.x += Math.sin(this._rndRir * dt) * 2
-    this.y += Math.cos(this._rndRir * dt) * 2
+    const { width, height } = this.enemySprite
+    const moveX = Math.sin(this._rndRir * dt) * 2
+    const moveY = Math.cos(this._rndRir * dt) * 2
+
+    this.x += moveX
+    this.y += moveY
 
     const setRandomDirection = Math.random() * 360
 
-    if (this.x < 0 || this.x > 1024 || this.y < 0 || this.y > 768) {
-      this.x -= Math.sin(this._rndRir) * 2 * 10
-      this.y -= Math.cos(this._rndRir) * 2 * 10
+    const isOutOfBounds =
+      this.x - width / 2 < 0 ||
+      this.x + width / 2 > APP_PROPS.width ||
+      this.y - height / 2 < 0 ||
+      this.y + height / 2 > APP_PROPS.height
+
+    if (isOutOfBounds) {
+      this.x -= moveX * 10
+      this.y -= moveY * 10
+
       this._rndRir = setRandomDirection
     }
   }
