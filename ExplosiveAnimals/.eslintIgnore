@@ -1,0 +1,7 @@
+node_modules/
+dist/
+build/
+assets/*.js
+.vscode/
+.eslintrc.js
+webpack.config.js

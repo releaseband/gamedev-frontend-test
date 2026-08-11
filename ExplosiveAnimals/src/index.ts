@@ -1,77 +1,57 @@
-import { createMachine, interpret } from "xstate";
-import { Game } from "./Game";
-import "./index.css";
+import { createMachine, interpret } from 'xstate'
+import { Game } from './Game'
+import './index.css'
+import {
+  errorAction,
+  initAction,
+  lazyAction,
+  preloadAction,
+  runAction,
+} from './actions'
 
-let game: Game | null = null;
-const stateMachine = createMachine(
-	{
-		initial: "init",
-		states: {
-			init: {
-				on: {
-					PRELOAD: "preload",
-				},
-				onEntry: "initAction",
-			},
-			preload: {
-				on: {
-					RUN: "run",
-					ERROR: "error",
-				},
-				onEntry: "preloadAction",
-			},
-			run: {
-				on: {
-					LAZYLOAD: "lazyLoad",
-					ERROR: "error",
-				},
-				onEntry: "runAction",
-			},
-			lazyLoad: {
-				on: {
-					ERROR: "error",
-				},
-				onEntry: "lazyAction",
-				type: "final",
-			},
-			error: {
-				onEntry: "errorAction",
-			},
-		},
-	},
-	{
-		actions: {
-			initAction: (context, event) => {
-				console.warn("init action", event);
-				game = new Game();
-				stateService.send("PRELOAD");
-			},
-			preloadAction: (context, event) => {
-				console.warn("preload action", event);
-				if (game) {
-					game.preload(() => {
-						stateService.send("RUN");
-					});
-				} else stateService.send("ERROR");
-			},
-			runAction: (context, event) => {
-				console.warn("run action", event);
-				if (game) {
-					game.populate();
-					game.run();
-					stateService.send("LAZYLOAD");
-				}
-			},
-			lazyAction: (context, event) => {
-				console.warn("lazyload action", event);
-			},
-			errorAction: (context, event) => {
-				console.warn("error action", event);
-			},
-		},
-	}
-);
+export interface GameContext {
+  game: Game | null
+}
 
-const stateService = interpret(stateMachine);
+const stateMachine = createMachine<GameContext>({
+  initial: 'init',
+  context: {
+    game: null,
+  },
+  states: {
+    init: {
+      entry: initAction,
+      on: {
+        PRELOAD: 'preload',
+      },
+    },
+    preload: {
+      entry: preloadAction,
+      on: {
+        RUN: 'run',
+        ERROR: 'error',
+      },
+    },
+    run: {
+      entry: runAction,
+      on: {
+        LAZYLOAD: 'lazyLoad',
+        ERROR: 'error',
+      },
+    },
+    lazyLoad: {
+      entry: lazyAction,
+      on: {
+        ERROR: 'error',
+      },
+      type: 'final',
+    },
+    error: {
+      entry: errorAction,
+    },
+  },
+})
 
-stateService.start();
+export const stateService = interpret(stateMachine)
+
+stateService.start()
